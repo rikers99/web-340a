@@ -1,0 +1,11 @@
+{
+    "name": "cooking-app",
+    "version": "1.0.0",
+    "description": "A simple recipe application",
+    "main": "recipes.js",
+    "scripts": {
+      "start": "node recipes.js",
+      "test": "tester.js"
+    },
+    "dependencies": {}
+  }
