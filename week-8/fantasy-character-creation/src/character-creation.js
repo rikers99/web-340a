@@ -1,3 +1,13 @@
+/*
+  Pragmatic JavaScript
+  Chapter 8
+  Programming Assignment
+
+  Author:  Steve Culmer
+  Date:  14 dec 24
+  Filename: character creation.js
+*/
+
 "use strict";
 
 /*
@@ -14,33 +24,52 @@
  * 3. Uncomment the 'module.exports' line under the "For promises" comment.
  */
 
-// For callbacks:
-/*
+// character.js
+class Character {
+  constructor(name, race, classType) {
+    this.name = name;
+    this.race = race;
+    this.classType = classType;
+    this.stats = {
+      strength: 10,
+      dexterity: 10,
+      constitution: 10,
+      intelligence: 10,
+      wisdom: 10,
+      charisma: 10
+    };
+  }
+
+  saveCharacter(filePath) {
+    const fs = require('fs');
+    fs.writeFileSync(filePath, JSON.stringify(this));
+  }
+}
+
+module.exports = Character;
+
+// character.test.js
+const Character = require('./character');
 const fs = require('fs');
 
-function createCharacter(character, callback) {
-  // TODO: Implement this function
-}
+test('Character creation', () => {
+  const character = new Character('Aragorn', 'Human', 'Ranger');
+  expect(character.name).toBe('Aragorn');
+  expect(character.race).toBe('Human');
+  expect(character.classType).toBe('Ranger');
+});
 
-function getCharacters(callback) {
-  // TODO: Implement this function
-}
-*/
+test('Character saving', () => {
+  const character = new Character('Legolas', 'Elf', 'Archer');
+  const filePath = 'test_character.json';
+  character.saveCharacter(filePath);
 
-// For promises:
-/*
-const fs = require('fs').promises;
+  const data = fs.readFileSync(filePath);
+  const savedCharacter = JSON.parse(data);
 
-async function createCharacter(character) {
-  // TODO: Implement this function
-}
+  expect(savedCharacter.name).toBe('Legolas');
+  expect(savedCharacter.race).toBe('Elf');
+  expect(savedCharacter.classType).toBe('Archer');
 
-async function getCharacters() {
-  // TODO: Implement this function
-}
-*/
-
-// Uncomment the appropriate exports depending on whether you're using callbacks or promises:
-
-// module.exports = { createCharacter, getCharacters }; // For callbacks
-// module.exports = { createCharacter, getCharacters }; // For promises
+  fs.unlinkSync(filePath);
+});
