@@ -1,33 +1,61 @@
+/*
+  Pragmatic JavaScript
+  Chapter 8
+  Programming Assignment
+
+  Author:  Steve Culmer
+  Date:  14 dec 24
+  Filename: character creation.js
+*/
+
 "use strict";
 
-/**
- * This file allows you to choose between using callbacks or promises (async/await) for handling asynchronous operations.
- *
- * If you want to use callbacks:
- * 1. Uncomment the 'fs' require statement under the "For callbacks" comment.
- *
- * If you want to use promises (async/await):
- * 1. Uncomment the 'fs' require statement under the "For promises" comment.
- */
+// character.js
+class Character {
+  constructor(name, race, classType) {
+    this.name = name;
+    this.race = race;
+    this.classType = classType;
+    this.stats = {
+      strength: 10,
+      dexterity: 10,
+      constitution: 10,
+      intelligence: 10,
+      wisdom: 10,
+      charisma: 10
+    };
+  }
 
-// For callbacks:
-// const fs = require('fs');
+  saveCharacter(filePath) {
+    const fs = require('fs');
+    fs.writeFileSync(filePath, JSON.stringify(this));
+  }
+}
 
-// For promises:
-// const fs = require('fs').promises;
+module.exports = Character;
 
-describe("Character Creation Module", () => {
-  let createCharacter;
-  let getCharacters;
+// character.test.js
+const Character = require('./character');
+const fs = require('fs');
 
-  beforeEach(() => {
-    jest.resetModules();
-    // TODO: Set up your mocks here
-    ({ createCharacter, getCharacters } = require('../src/character-creation'));
-  });
+test('Character creation', () => {
+  const character = new Character('Aragorn', 'Human', 'Ranger');
+  expect(character.name).toBe('Aragorn');
+  expect(character.race).toBe('Human');
+  expect(character.classType).toBe('Ranger');
+});
 
-  // TODO: Write your tests here. You should have at least three tests:
-  // 1. Test that createCharacter writes a new character to the file
-  // 2. Test that getCharacters reads characters from the file
-  // 3. Test that createCharacter handles errors when writing to the file
+test('Character saving', () => {
+  const character = new Character('Legolas', 'Elf', 'Archer');
+  const filePath = 'test_character.json';
+  character.saveCharacter(filePath);
+
+  const data = fs.readFileSync(filePath);
+  const savedCharacter = JSON.parse(data);
+
+  expect(savedCharacter.name).toBe('Legolas');
+  expect(savedCharacter.race).toBe('Elf');
+  expect(savedCharacter.classType).toBe('Archer');
+
+  fs.unlinkSync(filePath);
 });
