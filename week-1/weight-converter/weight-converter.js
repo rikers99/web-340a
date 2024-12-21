@@ -7,29 +7,31 @@
 
 "use strict";
 
-// File: weight-converter.js
-const readline = require("readline"); // import readline module
 function main() {
- // create readline interface object
- const rl = readline.createInterface({
- input: process.stdin,
- output: process.stdout,
- });
- // prompt the user to input weight in pounds
- rl.question("Enter the weight in pounds: ", function (weight) {
- rl.question("Print the weight in kilograms: ", function (kilograms) {
- // check if the input is a number
- if (isNaN(weight)) {
- console.error("Input must be a number."); // display error message
- process.exit(1); // exit with a non-zero error code
- }
+  // Get command line arguments 
+  // arguments 0: Program, 1: Script, 2: User input
+  const args = process.argv; // Array[strings] 
+  
+  // If no arguments, return error 
+  if (args.length < 3) {
+    console.log("Usage: node weight-converter.js <pounds>"); 
+	process.exit(1); // exit with a non-zero error code
+  } 
+  
+  // If arguments, parse int 
+  const weight = parseInt(args[2]); 
 
- const weight = (pounds / 16).toFixed(2); // convert pounds to kilograms
- console.log(
- `For ${pounds}, ${kilograms} kilograms is equivalent to ${pounds} pounds.`
- ); // display the conversion
- rl.close(); // close the readline object
- });
- });
+  // If not an int, display error 
+  if (isNaN(weight)) {
+    console.error("Input must be a number."); // display error message
+    process.exit(1); // exit with a non-zero error code
+  }
+  
+  // If int, do conversion and output
+  const kilograms = (weight / 2.20462).toFixed(2); // convert pounds to kilograms
+  console.log(`${kilograms}`); // display the conversion
 }
+
+
+
 main(); // call the main function
